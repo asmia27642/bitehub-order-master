@@ -11,9 +11,8 @@ import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/login")({
-  validateSearch: (raw: Record<string, unknown>) => ({
-    redirect: typeof raw["redirect"] === "string" ? raw["redirect"] : "/",
-  }),
+  validateSearch: (raw: Record<string, unknown>): { redirect?: string } =>
+    typeof raw["redirect"] === "string" ? { redirect: raw["redirect"] } : {},
   head: () => ({
     meta: [
       { title: "Sign in — BiteHub" },
@@ -33,7 +32,7 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const safeRedirect = redirect.startsWith("/") ? redirect : "/";
+  const safeRedirect = redirect && redirect.startsWith("/") ? redirect : "/";
 
   useEffect(() => {
     if (!loading && user) void navigate({ to: safeRedirect, replace: true });

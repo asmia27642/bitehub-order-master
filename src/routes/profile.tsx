@@ -75,7 +75,7 @@ function ProfilePage() {
 
   const claimAdmin = async () => {
     setClaiming(true);
-    const { data, error } = await supabase.rpc("claim_admin");
+    const { data, error } = await supabase.rpc("claim_first_admin");
     setClaiming(false);
     if (error) {
       toast.error(error.message);
