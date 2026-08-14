@@ -163,8 +163,7 @@ function CheckoutPage() {
         .single();
       if (error) throw error;
 
-      const { error: itemsError } = await supabase.from("order_items").insert(
-        items.map((i) => ({
+      const rows = items.map((i) => ({
           order_id: (order as { id: string }).id,
           menu_item_id: i.itemId,
           name: i.name,
@@ -173,8 +172,8 @@ function CheckoutPage() {
           price: i.unitPrice,
           selected_options: i.options,
           notes: i.notes || null,
-        })),
-      );
+      }));
+      const { error: itemsError } = await supabase.from("order_items").insert(rows as never);
       if (itemsError) throw itemsError;
 
       clear();
@@ -374,8 +373,8 @@ function Field({
   label: string;
   value: string;
   onChange: (v: string) => void;
-  error?: string;
-  type?: string;
+  error?: string | undefined;
+  type?: string | undefined;
 }) {
   return (
     <div className="space-y-2">
